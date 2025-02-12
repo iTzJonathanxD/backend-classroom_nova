@@ -2,31 +2,31 @@ import { Controller, Get, Post, Body, Param, Put, Delete } from '@nestjs/common'
 import { UserService } from './user.service';
 import { User } from '../../utils/index';
 
-@Controller('user')
+@Controller('api/v1/user')
 export class UserController {
   constructor(private readonly userService: UserService) {}
 
-  @Get()
+  @Get('all')
   async getAllUsers() {
     return await this.userService.findAll();
   }
 
-  @Get(':id')
+  @Get('getById/:id')
   async getUser(@Param('id') id: string) {
     return await this.userService.findOne(id);
   }
 
-  @Post()
+  @Post('create')
   async createUser(@Body() userData: Partial<User>) {
     return await this.userService.create(userData);
   }
 
-  @Put(':id')
+  @Put('update/:id')
   async updateUser(@Param('id') id: string, @Body() userData: Partial<User>) {
     return await this.userService.update(id, userData);
   }
 
-  @Delete(':id')
+  @Delete('delete/:id')
   async deleteUser(@Param('id') id: string) {
     return await this.userService.remove(id);
   }
