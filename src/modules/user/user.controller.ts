@@ -7,27 +7,27 @@ export class UserController {
   constructor(private readonly userService: UserService) {}
 
   @Get('all')
-  async getAllUsers() {
+  async getAll() {
     return await this.userService.findAll();
   }
 
   @Get('getById/:id')
-  async getUser(@Param('id') id: string) {
+  async get(@Param('id') id: string) {
     return await this.userService.findOne(id);
   }
 
   @Post('create')
-  async createUser(@Body() userData: Partial<User>) {
+  async create(@Body() userData: Partial<User>) {
     return await this.userService.create(userData);
   }
 
   @Put('update/:id')
-  async updateUser(@Param('id') id: string, @Body() userData: Partial<User>) {
+  async update(@Param('id') id: string, @Body() userData: Partial<User>) {
     return await this.userService.update(id, userData);
   }
 
   @Delete('delete/:id')
-  async deleteUser(@Param('id') id: string) {
+  async delete(@Param('id') id: string) {
     return await this.userService.remove(id);
   }
 }
