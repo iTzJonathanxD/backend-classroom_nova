@@ -39,9 +39,9 @@ export class UserService {
     if (!deletedUser) {
       throw new Error(`Usuario con id ${id} no encontrada`);
     }
-    return { ...deletedUser, id };
+    return { ...deletedUser, id};
   }
-  
+
   async findOneByUsername(email: string): Promise<User | null> {
     const user = await this.userModel.findOne({ email }).exec();
     if (!user) {
