@@ -1,11 +1,18 @@
 import { NestFactory } from '@nestjs/core';
 import { AppModule } from './app.module';
 import { envs } from './config'
-import { NotFoundExceptionFilter } from './utils/index';
+import { NotFoundExceptionFilter,InternalServerErrorExceptionFilter,HttpExceptionFilter,MongooseValidationExceptionFilter } from './utils/index';
 
 async function bootstrap() {
   const app = await NestFactory.create(AppModule);
-  app.useGlobalFilters(new NotFoundExceptionFilter)
+
+  app.useGlobalFilters(
+    new NotFoundExceptionFilter(),
+    new InternalServerErrorExceptionFilter(),
+    new HttpExceptionFilter(),
+    new MongooseValidationExceptionFilter(),
+  );
+
   await app.listen(envs.port);
 }
 bootstrap();

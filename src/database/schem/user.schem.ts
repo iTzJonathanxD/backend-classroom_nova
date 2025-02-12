@@ -1,4 +1,3 @@
-import { required } from 'joi';
 import * as mongoose from 'mongoose';
 
 export const Userschema = new mongoose.Schema(
