@@ -1,12 +1,13 @@
 import * as dotenv from 'dotenv';
 import { EnvVars } from '../utils/index';
-import * as joi from 'joi';
+import Joi, * as joi from 'joi';
 
 dotenv.config(); 
 
 export const envSchema = joi.object({
   PORT: joi.number().required(),
   MONGO_URI: joi.string().required(),
+  TOKEN_SECRETKEY: joi.string().required()
 }).unknown(true); 
 
 const { error, value } = envSchema.validate(process.env);
@@ -20,4 +21,5 @@ const envVars: EnvVars = value;
 export const envs = {
   port: envVars.PORT,
   mongoUri: envVars.MONGO_URI,
+  jwt: envVars.TOKEN_SECRETKEY,
 };

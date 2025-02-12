@@ -10,36 +10,6 @@ import { ComunitySchema, Userschema,category_cousesSchema,coursesSchema,coursesb
         ConfigModule.forRoot({ isGlobal: true }),
         MongooseModule.forRoot(envs.mongoUri || 'mongodb://localhost:27017/mydb', {
         }),
-        MongooseModule.forFeatureAsync([
-            {
-                name: 'users',
-                useFactory: () => Userschema,
-            },
-            {
-                name: 'lives',
-                useFactory: () => livesSchema,
-            },
-            {
-                name: 'payments',
-                useFactory: () => paymentsSchema,
-            },
-            {
-                name: 'comunitys',
-                useFactory: () => ComunitySchema,
-            },
-            {
-                name: 'courses',
-                useFactory: () => coursesSchema,
-            },
-            {
-                name: 'courses_buyded',
-                useFactory: () => coursesbuySchema,
-            },
-            {
-                name: 'category_courses',
-                useFactory: () => category_cousesSchema,
-            },
-          ]),
     ],
 })
 export class DatabaseModule {}

@@ -5,12 +5,10 @@ import { User } from '../../utils/index';
 
 @Injectable()
 export class UserService {
-  constructor(
-    @InjectModel(User.name) private readonly userModel: Model<User>,
-  ) {}
+  constructor(@InjectModel(User.name) private readonly userModel: Model<User>) {}
 
   async findAll(): Promise<User[]> {
-    return await this.userModel.find().exec();
+    return this.userModel.find().exec();
   }
 
   async findOne(id: string): Promise<User | null> {
@@ -23,10 +21,10 @@ export class UserService {
 
   async create(userData: Partial<User>): Promise<User> {
     const user = new this.userModel(userData);
-    return await user.save();
+    return user.save();
   }
 
-  async update(id: string, userData: Partial<User>): Promise<User | null> {
+  async update(id: string, userData: Partial<User>): Promise<User> {
     const updatedUser = await this.userModel.findByIdAndUpdate(id, userData, { new: true }).exec();
     if (!updatedUser) {
       throw new NotFoundException(`Usuario con ID ${id} no encontrado`);
@@ -36,16 +34,20 @@ export class UserService {
 
   async remove(id: string): Promise<User> {
     const deletedUser = await this.userModel.findByIdAndDelete(id).exec();
+  
     if (!deletedUser) {
-      throw new Error(`Usuario con id ${id} no encontrada`);
+      throw new Error(`Usuario con id ${id} no encontrado`);
     }
-    return { ...deletedUser, id};
+    
+    const user = deletedUser.toObject() as User;  
+    return user;
   }
+
 
   async findOneByUsername(email: string): Promise<User | null> {
     const user = await this.userModel.findOne({ email }).exec();
     if (!user) {
-      throw new NotFoundException(`Usuario con correo de ${email} no encontrado`);
+      throw new NotFoundException(`Usuario con correo ${email} no encontrado`);
     }
     return user;
   }
