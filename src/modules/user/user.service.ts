@@ -41,4 +41,12 @@ export class UserService {
     }
     return { ...deletedUser, id };
   }
+  
+  async findOneByUsername(email: string): Promise<User | null> {
+    const user = await this.userModel.findOne({ email }).exec();
+    if (!user) {
+      throw new NotFoundException(`Usuario con correo de ${email} no encontrado`);
+    }
+    return user;
+  }
 }

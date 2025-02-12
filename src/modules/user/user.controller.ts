@@ -30,4 +30,17 @@ export class UserController {
   async delete(@Param('id') id: string) {
     return await this.userService.remove(id);
   }
+  
+  @Post('login')
+  async login(@Body() loginData: { email: string; password: string }) {
+    const { email, password } = loginData;
+    const user = await this.userService.findOneByUsername(email);
+    if (!user || user.password !== password) {
+      throw new Error('Credenciales incorrectas');
+    }
+    return {
+      message: 'Login exitoso',
+      user,
+    };
+  }
 }
