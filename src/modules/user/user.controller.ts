@@ -1,6 +1,6 @@
-import { Controller, Get, Post, Body, Param, Put, Delete, UseGuards } from '@nestjs/common';
+import { Controller, Get, Post, Body, Param, Put, Delete, Patch, UseGuards } from '@nestjs/common';
 import { UserService } from './user.service';
-import { User } from '../../utils/index';
+import { User } from 'src/model';
 import { JwtServices } from '../jwt/jwt.service';
 import { AuthGuard } from '../jwt/auth.guard';
 
@@ -68,5 +68,14 @@ export class UserController {
       user,
       token,
     };
+  }
+
+  @Patch('change-password/:id')
+  @UseGuards(AuthGuard) 
+  async changePassword(
+    @Param('id') id: string,
+    @Body('newPassword') newPassword: string
+  ) {
+    return await this.userService.changePassword(id, newPassword);
   }
 }

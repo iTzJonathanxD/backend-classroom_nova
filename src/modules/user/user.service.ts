@@ -1,7 +1,8 @@
 import { Injectable, NotFoundException } from '@nestjs/common';
 import { InjectModel } from '@nestjs/mongoose';
 import { Model } from 'mongoose';
-import { User } from '../../utils/index';
+import { User } from 'src/model';
+import * as bcrypt from 'bcrypt';
 
 @Injectable()
 export class UserService {
@@ -43,6 +44,21 @@ export class UserService {
     return user;
   }
 
+  async changePassword(id: string, newPassword: string): Promise<{ message: string }> {
+    const user = await this.userModel.findById(id).exec();
+    
+    if (!user) {
+      throw new NotFoundException(`Usuario con ID ${id} no encontrado`);
+    }
+  
+    const saltRounds = 10;
+    const hashedPassword = await bcrypt.hash(newPassword, saltRounds);
+  
+    user.password = hashedPassword;
+    await user.save();
+  
+    return { message: 'Contraseña actualizada exitosamente' };
+  }
 
   async findOneByUsername(email: string): Promise<User | null> {
     const user = await this.userModel.findOne({ email }).exec();

@@ -1,0 +1,7 @@
+export * from '../model/user.model'
+export * from '../model/live.model'
+export * from '../model/comunity.model'
+export * from '../model/categorycourse.model'
+export * from '../model/coursebuy.model'
+export * from '../model/courses.model'
+export * from '../model/payment.model'
