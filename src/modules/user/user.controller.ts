@@ -46,29 +46,30 @@ export class UserController {
   async delete(@Param('id') id: string) {
     return await this.userService.remove(id);
   }
-
+  
   @Post('login')
   async login(@Body() loginData: { email: string; password: string }) {
     const { email, password } = loginData;
     const user = await this.userService.findOneByUsername(email);
-
+  
     if (!user) {
       throw new Error('Usuario no encontrado');
     }
-
-    const isMatch = await user.comparePassword(password);
+  
+    const isMatch = await (user as any).comparePassword(password);
     if (!isMatch) {
       throw new Error('Credenciales incorrectas');
     }
-
+  
     const token = await this.tokenService.generateJwt(user);
-
+  
     return {
       message: 'Login exitoso',
       user,
       token,
     };
   }
+  
 
   @Patch('change-password/:id')
   @UseGuards(AuthGuard) 
