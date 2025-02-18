@@ -67,4 +67,12 @@ export class UserService {
     }
     return user;
   }
+
+  async findOneByNovaId(novaId: string): Promise<User | null> {
+    const user = await this.userModel.findOne({ novaId }).exec();
+    if (!user) {
+      throw new NotFoundException(`Usuario con NovaID ${novaId} no encontrado`);
+    }
+    return user;
+  }
 }

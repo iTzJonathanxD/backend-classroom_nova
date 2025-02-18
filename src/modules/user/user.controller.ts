@@ -23,6 +23,12 @@ export class UserController {
     return await this.userService.findOne(id);
   }
 
+  @Get('getByNovaId/:novaId')
+  @UseGuards(AuthGuard) 
+  async getByNovaId(@Param('novaId') novaId: string) {
+    return await this.userService.findOneByNovaId(novaId);
+  }
+
   @Post('create')
   async create(@Body() userData: Partial<User>) {
     const user = await this.userService.create(userData);
