@@ -18,6 +18,12 @@ export class User {
   @Prop({ required: true })
   telefono: string;
 
+  @Prop({ required: true, unique: true })
+  novaId: string;
+
+  @Prop({ required: true })
+  countryCode: string;
+
   @Prop()
   foto_perfil?: string;
 
