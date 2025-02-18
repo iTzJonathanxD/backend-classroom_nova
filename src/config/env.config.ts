@@ -7,7 +7,8 @@ dotenv.config();
 export const envSchema = joi.object({
   PORT: joi.number().required(),
   MONGO_URI: joi.string().required(),
-  TOKEN_SECRETKEY: joi.string().required()
+  TOKEN_SECRETKEY: joi.string().required(),
+  CORS_ORIGIN: joi.string().required()
 }).unknown(true); 
 
 const { error, value } = envSchema.validate(process.env);
@@ -22,4 +23,5 @@ export const envs = {
   port: envVars.PORT,
   mongoUri: envVars.MONGO_URI,
   jwt: envVars.TOKEN_SECRETKEY,
+  corsOrigin: envVars.CORS_ORIGIN,
 };
