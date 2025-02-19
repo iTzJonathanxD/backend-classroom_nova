@@ -1,7 +1,7 @@
 import { Controller, Get, Param } from '@nestjs/common';
 import { CoursesService } from './courses.service';
-import { BaseController } from '../base.controller';
 import { CourseDocument } from 'src/model';
+import { BaseController } from '../../shared/base/base.controller';
 
 @Controller('api/v1/courses')
 export class CoursesController extends BaseController<CourseDocument> {

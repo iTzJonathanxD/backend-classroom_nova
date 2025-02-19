@@ -1,21 +1,13 @@
-import { Injectable } from '@nestjs/common';
-import * as jwt from 'jsonwebtoken'; 
-import { envs } from '../../config'
+import { Injectable } from '@nestjs/common'
+import { generateJwt, verifyJwt } from '../../common/utils/helpers';
 
 @Injectable()
 export class JwtServices {
-  private readonly secretKey = envs.jwt
 
-  async verifyJwt(token: string) {
-    try {
-      const decoded = jwt.verify(token, this.secretKey);
-      return decoded; 
-    } catch (error) {
-      throw new Error('Token no válido');
-    }
+  async verifyJwt(token: string): Promise<any> {
+    return verifyJwt(token); 
   }
-
-  async generateJwt(user: any) {
-    return jwt.sign({ userId: user.id }, this.secretKey, { expiresIn: '1h' });
+  async generateJwt(user: any): Promise<string> {
+    return generateJwt(user); 
   }
 }

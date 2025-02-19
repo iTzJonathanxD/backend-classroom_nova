@@ -2,7 +2,9 @@ import { Controller, Get, Post, Body, Param, Put, Delete, Patch, UseGuards } fro
 import { UserService } from './user.service';
 import { User } from 'src/model';
 import { JwtServices } from '../jwt/jwt.service';
-import { AuthGuard } from '../jwt/auth.guard';
+import { AuthGuard } from 'src/common/guards/auth.guard';
+import { UserDecorator } from 'src/common/decorators/user.decorator';
+import { Auth } from 'src/common/decorators/auth.decorator';
 
 @Controller('api/v1/user')
 export class UserController {
@@ -12,18 +14,21 @@ export class UserController {
   ) {}
 
   @Get('all')
+  @Auth()
   @UseGuards(AuthGuard) 
   async getAll() {
     return await this.userService.findAll();
   }
 
   @Get('getById/:id')
+  @Auth()
   @UseGuards(AuthGuard) 
   async get(@Param('id') id: string) {
     return await this.userService.findOne(id);
   }
 
   @Get('getByNovaId/:novaId')
+  @Auth()
   @UseGuards(AuthGuard) 
   async getByNovaId(@Param('novaId') novaId: string) {
     return await this.userService.findOneByNovaId(novaId);
@@ -42,12 +47,14 @@ export class UserController {
   }
 
   @Put('update/:id')
+  @Auth()
   @UseGuards(AuthGuard) 
   async update(@Param('id') id: string, @Body() userData: Partial<User>) {
     return await this.userService.update(id, userData);
   }
 
   @Delete('delete/:id')
+  @Auth()
   @UseGuards(AuthGuard) 
   async delete(@Param('id') id: string) {
     return await this.userService.remove(id);
@@ -76,6 +83,12 @@ export class UserController {
     };
   }
   
+  @Get('profile')
+  @Auth()
+  @UseGuards(AuthGuard) 
+  async getProfile(@UserDecorator() user: User) { 
+    return user; 
+  }
 
   @Patch('change-password/:id')
   @UseGuards(AuthGuard) 

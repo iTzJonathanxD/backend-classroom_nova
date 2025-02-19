@@ -1,5 +1,5 @@
 import * as dotenv from 'dotenv';
-import { EnvVars } from '../utils/index';
+import { EnvVars } from '../common/interfaces/env.interface';
 import Joi, * as joi from 'joi';
 
 dotenv.config(); 

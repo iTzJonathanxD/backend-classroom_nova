@@ -1,12 +1,14 @@
 import { Prop, Schema, SchemaFactory } from '@nestjs/mongoose';
-import { Document } from 'mongoose';
+import { Document, Types } from 'mongoose';
 import { User } from './user.model'; 
 
-export type PaymentDocument = Payments & Document;
+export type PaymentDocument = Document & Payments;
 
 @Schema()
 export class Payments {
-  @Prop({ required: true })
+  _id?: Types.ObjectId; 
+
+  @Prop({ type: Types.ObjectId, ref: 'User', required: true })
   alumnoId: User; 
 
   @Prop({ required: true })

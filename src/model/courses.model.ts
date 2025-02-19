@@ -1,5 +1,5 @@
 import { Prop, Schema, SchemaFactory } from '@nestjs/mongoose';
-import { Document } from 'mongoose';
+import { Document, Types } from 'mongoose';
 import { Live } from './live.model'; 
 import { User } from './user.model';
 import { CategoryCourse } from './categorycourse.model';
@@ -8,6 +8,8 @@ export type CourseDocument = Course & Document;
 
 @Schema()
 export class Course {
+  _id?: Types.ObjectId; 
+
   @Prop({ required: true })
   nombre: string;
 

@@ -1,5 +1,5 @@
 import { Injectable } from '@nestjs/common';
-import { BaseService } from '../base.service';
+import { BaseService } from '../../shared/base/base.service';
 import { CourseBuy, CourseBuyDocument } from 'src/model';
 import { InjectModel } from '@nestjs/mongoose';
 import { Model } from 'mongoose';
@@ -10,6 +10,7 @@ export class CoursesBuydedService extends BaseService<CourseBuyDocument> {
         super(coyrsebuydedservice);
     }
      async findUserWithDetails(id: string): Promise<CourseBuyDocument> {
-         return this.findOneWithPopulate(id, ['referidosId']);
+         const response = await this.findOneWithPopulate(id, ['referidosId']);
+         return response.data as CourseBuyDocument;
  }
 }

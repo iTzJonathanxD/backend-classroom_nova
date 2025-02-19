@@ -1,7 +1,7 @@
 import { Controller, Get, Param } from '@nestjs/common';
-import { BaseController } from '../base.controller';
 import { CommunityDocument } from 'src/model';
 import { ComunityService } from './comunity.service';
+import { BaseController } from '../../shared/base/base.controller';
 
 @Controller('api/v1/comunity')
 export class ComunityController extends BaseController<CommunityDocument>{
