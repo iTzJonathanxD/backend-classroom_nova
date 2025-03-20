@@ -14,7 +14,7 @@ export class PaymentsController extends BaseController<PaymentDocument> {
     private readonly productService: PaymentsService,
     private readonly iaGoogleService: IaGoogleService,
   ) {
-    super(productService); 
+    super(productService);
   }
 
   @Post('process-payment-image')
@@ -26,16 +26,44 @@ export class PaymentsController extends BaseController<PaymentDocument> {
       // Procesar la imagen con el servicio de visión
       const analysis = await this.iaGoogleService.getVision().analyzeImage(
         file.buffer,
-        `Analiza este comprobante de pago y extrae la siguiente información en formato JSON:
-        {
-          "monto": "cantidad numérica del pago",
-          "moneda": "código de moneda (priorizar: PEN, MXN, USD)",
-          "razon": "descripción o concepto del pago",
-          "fecha_pago": "fecha y hora en formato ISO 8601 (YYYY-MM-DDTHH:mm:ss.SSSZ)",
-          "entity": "tipo de comprobante (transferencia bancaria, captura de teléfono, plataforma de pago específica)",
-          "codigo_transaccion": "código único de la transacción o voucher"
-        }
-        Responde SOLO con el JSON, sin texto adicional.`
+        `Analiza este comprobante de pago y extrae la siguiente información en formato JSON:  
+{
+  "monto": "cantidad numérica del pago",
+  "moneda": "código de moneda (priorizar: PEN, MXN, USD)",
+  "razon": "descripción o concepto del pago",
+  "fecha_pago": "fecha y hora en formato ISO 8601 (YYYY-MM-DDTHH:mm:ss.SSSZ)",
+  "entity": "entidad financiera o plataforma de pago (solo bancos y métodos de pago con comprobante en México, Perú y EE.UU.)",
+  "codigo_transaccion": "código único de la transacción o voucher"
+}
+
+### Criterios para "entity":
+- Si es una **transferencia bancaria**, identifica el banco emisor o receptor.
+- Si es una **captura de pago de teléfono**, extrae el nombre de la app (ej. PayPal, Mercado Pago, Venmo).
+- Si es un **voucher de tarjeta**, identifica la entidad procesadora (ej. Visa, Mastercard, American Express).
+- Si el método no pertenece a México, Perú o EE.UU., omítelo.
+
+### Métodos de pago válidos:
+
+#### **🇲🇽 México**  
+✅ **Bancos (SPEI, depósitos, cheques)**: BBVA México, Banorte, Citibanamex, HSBC México, Santander México, Banco Azteca, etc.  
+✅ **Plataformas digitales**: Mercado Pago, PayPal, Clip, CoDi, OpenPay, Conekta.  
+✅ **Tarjetas y vouchers**: Visa, Mastercard, American Express.  
+✅ **Pagos en efectivo con comprobante**: OXXO Pay, 7-Eleven Pay, Farmacias del Ahorro, Chedraui Pay.  
+
+#### **🇵🇪 Perú**  
+✅ **Bancos (transferencias, cheques, depósitos)**: BCP, Interbank, BBVA Perú, Scotiabank Perú, Caja Huancayo, etc.  
+✅ **Plataformas digitales**: Yape, Plin, Lukita, Mercado Pago, PayU, PayPal.  
+✅ **Tarjetas y vouchers**: Visa, Mastercard, American Express, Diners Club.  
+✅ **Pagos en efectivo con comprobante**: PagoEfectivo, Kasnet, Western Union.  
+
+#### **🇺🇸 EE.UU.**  
+✅ **Bancos (ACH, depósitos, cheques)**: Bank of America, Chase Bank, Wells Fargo, Citibank, Capital One, PNC Bank.  
+✅ **Plataformas digitales**: PayPal, Venmo, Cash App, Zelle, Stripe, Square.  
+✅ **Tarjetas y vouchers**: Visa, Mastercard, American Express, Discover.  
+✅ **Pagos en efectivo con comprobante**: MoneyGram, Western Union.  
+
+Responde **solo con el JSON**, sin texto adicional.
+`
       );
 
       // Eliminar las comillas invertidas y espacios adicionales
