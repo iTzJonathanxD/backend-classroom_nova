@@ -83,6 +83,7 @@ export class UserController {
     };
   }
   
+  
   @Get('profile')
   @Auth()
   @UseGuards(AuthGuard) 
@@ -97,5 +98,10 @@ export class UserController {
     @Body('newPassword') newPassword: string
   ) {
     return await this.userService.changePassword(id, newPassword);
+  }
+
+  @Get('validate-token/:id')
+  validateToken(@Param('id') id: string) {
+    return this.userService.validateToken(id);
   }
 }

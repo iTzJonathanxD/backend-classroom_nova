@@ -25,3 +25,8 @@ export const envs = {
   jwt: envVars.TOKEN_SECRETKEY,
   corsOrigin: envVars.CORS_ORIGIN,
 };
+
+export const GOOGLE_AI_API_KEY = process.env.GOOGLE_AI_API_KEY;
+export const IMAGE_GENERATION_MODEL = process.env.IMAGE_GENERATION_MODEL || 'default-image-model';
+export const VISION_MODEL = process.env.VISION_MODEL || 'default-vision-model';
+export const TEXT_GENERATION_MODEL = process.env.TEXT_GENERATION_MODEL || 'default-text-model';

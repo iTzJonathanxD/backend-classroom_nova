@@ -75,4 +75,13 @@ export class UserService {
     }
     return user;
   }
+
+  async validateToken(userId: string): Promise<{ isValid: boolean }> {
+    try {
+      await this.findOne(userId);
+      return { isValid: true };
+    } catch (error) {
+      return { isValid: false };
+    }
+  }
 }

@@ -27,6 +27,9 @@ export class User {
   @Prop()
   foto_perfil?: string;
 
+  @Prop({ type: [String], default: [] })
+  enrolledCoursesIds: string[];
+
   @Prop({ required: true })
   rol: string;
 

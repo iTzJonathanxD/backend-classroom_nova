@@ -8,14 +8,20 @@ export type CourseBuyDocument = CourseBuy & Document;
 export class CourseBuy {
   _id?: Types.ObjectId; 
   
+  @Prop({ type: Types.ObjectId, ref: 'Subscription', default: null })
+  subscriptionId?: Types.ObjectId | null;
+
   @Prop({ required: true })
   fecha_adquisicion: string;
 
   @Prop({ required: true })
   renovacion: string;
 
-  @Prop({ type: [{ type: String, ref: 'User' }] })
-  referidosId: User[];
+  @Prop({ type: Types.ObjectId, ref: 'User', required: true })
+  estudianteId: Types.ObjectId;
+
+  @Prop({ type: Types.ObjectId, ref: 'Course', required: true })
+  courseId: Types.ObjectId;
 }
 
 export const CourseBuySchema = SchemaFactory.createForClass(CourseBuy);

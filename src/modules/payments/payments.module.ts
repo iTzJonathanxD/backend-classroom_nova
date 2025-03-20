@@ -4,11 +4,13 @@ import { PaymentsController } from './payments.controller';
 import { MongooseModule } from '@nestjs/mongoose';  
 import { Payments,PaymentSchema } from 'src/model';
 import { JwtModule } from '../jwt/jwt.module';
+import { IaGoogleModule } from '../../feat/ia-google/ia-google.module';
 
 @Module({
   imports: [
     MongooseModule.forFeature([{ name: Payments.name, schema: PaymentSchema }]),  
-    JwtModule
+    JwtModule,
+    IaGoogleModule
   ],
   providers: [PaymentsService],
   controllers: [PaymentsController]

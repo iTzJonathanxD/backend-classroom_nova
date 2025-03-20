@@ -9,6 +9,8 @@ import { CategoryCoursesModule } from './modules/category_courses/category_cours
 import { CoursesBuydedModule } from './modules/courses_buyded/courses_buyded.module';
 import { LoggerMiddleware } from './common/middlewares/logger.middleware';
 import { LoggerModule } from './modules/logger/logger.module';
+import { ImageModule } from './modules/image/image.module';
+import { IaGoogleModule } from './feat/ia-google/ia-google.module';
 
 @Module({
   imports: [
@@ -20,7 +22,9 @@ import { LoggerModule } from './modules/logger/logger.module';
     ComunityModule, 
     CategoryCoursesModule, 
     CoursesBuydedModule,
-    LoggerModule],
+    ImageModule,
+    LoggerModule,
+    IaGoogleModule],
   controllers: [],
   providers: [],
 })
