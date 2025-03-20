@@ -9,7 +9,7 @@ export class Payments {
   _id?: Types.ObjectId;
 
   @Prop({ type: Types.ObjectId, ref: 'User', required: true })
-  alumnoId: User;
+  estudianteId: string;
 
   @Prop({ required: true, min: 0 })
   monto: number;
@@ -57,7 +57,7 @@ export const PaymentSchema = SchemaFactory.createForClass(Payments);
 
 // Índices para mejorar el rendimiento de las búsquedas
 PaymentSchema.index({ codigo_transaccion: 1 }, { unique: true });
-PaymentSchema.index({ alumnoId: 1, fecha_pago: -1 });
+//PaymentSchema.index({ estudianteId: 1, fecha_pago: -1 });
 PaymentSchema.index({ estado: 1, fecha_pago: -1 });
 
 // Middleware para validar el código de transacción según la moneda
@@ -73,7 +73,6 @@ PaymentSchema.pre('save', function(next) {
   }
   next();
 });
-
 // Método para validar que la fecha de expiración sea posterior a la fecha de pago
 PaymentSchema.methods.validateFechas = function() {
   return this.fecha_expiracion > this.fecha_pago;

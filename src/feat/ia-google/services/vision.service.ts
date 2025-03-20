@@ -13,20 +13,8 @@ export class VisionService {
   async analyzeImage(imageData: Buffer, prompt: string): Promise<string> {
     try {
       const result = await this.model.generateContent([
-        {
-          role: 'user',
-          parts: [
-            {
-              text: prompt
-            },
-            {
-              inlineData: {
-                mimeType: 'image/jpeg',
-                data: imageData.toString('base64')
-              }
-            }
-          ]
-        }
+        { text: prompt },
+        { inlineData: { mimeType: 'image/jpeg', data: imageData.toString('base64') } }
       ]);
       const response = await result.response;
       return response.text();
@@ -38,20 +26,8 @@ export class VisionService {
   async detectObjects(imageData: Buffer): Promise<string> {
     try {
       const result = await this.model.generateContent([
-        {
-          role: 'user',
-          parts: [
-            {
-              text: 'What objects do you see in this image?'
-            },
-            {
-              inlineData: {
-                mimeType: 'image/jpeg',
-                data: imageData.toString('base64')
-              }
-            }
-          ]
-        }
+        { text: 'What objects do you see in this image?' },
+        { inlineData: { mimeType: 'image/jpeg', data: imageData.toString('base64') } }
       ]);
       const response = await result.response;
       return response.text();
@@ -63,20 +39,8 @@ export class VisionService {
   async describeImage(imageData: Buffer): Promise<string> {
     try {
       const result = await this.model.generateContent([
-        {
-          role: 'user',
-          parts: [
-            {
-              text: 'Describe this image in detail.'
-            },
-            {
-              inlineData: {
-                mimeType: 'image/jpeg',
-                data: imageData.toString('base64')
-              }
-            }
-          ]
-        }
+        { text: 'Describe this image in detail.' },
+        { inlineData: { mimeType: 'image/jpeg', data: imageData.toString('base64') } }
       ]);
       const response = await result.response;
       return response.text();

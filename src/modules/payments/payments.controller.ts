@@ -21,7 +21,7 @@ export class PaymentsController extends BaseController<PaymentDocument> {
   @Auth()
   @UseGuards(AuthGuard)
   @UseInterceptors(FileInterceptor('file'))
-  async processPaymentImage(@UploadedFile() file: Express.Multer.File, @Body() body: { ip_transaccion: string, dispositivo: string, detalles_adicionales: string }) {
+  async processPaymentImage(@UploadedFile() file: Express.Multer.File, @Body() body: { ip_transaccion: string, dispositivo: string, detalles_adicionales: string, estudianteId: string }) {
     try {
       // Procesar la imagen con el servicio de visión
       const analysis = await this.iaGoogleService.getVision().analyzeImage(
@@ -38,7 +38,13 @@ export class PaymentsController extends BaseController<PaymentDocument> {
         Responde SOLO con el JSON, sin texto adicional.`
       );
 
-      const parsedAnalysis = JSON.parse(analysis);
+      // Eliminar las comillas invertidas y espacios adicionales
+      const cleanedAnalysis = analysis.replace(/```json/g, '').replace(/```/g, '').trim();
+
+      console.log(cleanedAnalysis);
+
+      // Asegúrate de que el análisis sea un JSON válido
+      const parsedAnalysis = JSON.parse(cleanedAnalysis);
 
       // Validar que todos los campos requeridos estén presentes
       const requiredFields = ['monto', 'moneda', 'razon', 'fecha_pago', 'entity', 'codigo_transaccion'];
@@ -47,17 +53,23 @@ export class PaymentsController extends BaseController<PaymentDocument> {
       if (missingFields.length > 0) {
         throw new Error(`Campos faltantes en el análisis: ${missingFields.join(', ')}`);
       }
+
       // Crear un nuevo objeto de pago
       const newPayment = new Payments();
-      newPayment.alumnoId = parsedAnalysis.alumnoId;
+      newPayment.estudianteId = body.estudianteId;
       newPayment.monto = parsedAnalysis.monto;
       newPayment.moneda = parsedAnalysis.moneda;
       newPayment.razon = parsedAnalysis.razon;
       newPayment.fecha_pago = new Date(parsedAnalysis.fecha_pago);
-      newPayment.fecha_expiracion = new Date(); // Ajusta según tu lógica
       newPayment.codigo_transaccion = parsedAnalysis.codigo_transaccion;
       newPayment.entity = parsedAnalysis.entity;
       newPayment.estado = 'Pendiente'; // Estado inicial
+
+      // Establecer la fecha de expiración a un mes a partir de ahora
+      const expirationDate = new Date();
+      expirationDate.setMonth(expirationDate.getMonth() + 1);
+      newPayment.fecha_expiracion = expirationDate;
+
       newPayment.metadata = {
         imagen_voucher: file.filename,
         detalles_adicionales: body.detalles_adicionales,
