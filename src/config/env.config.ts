@@ -8,7 +8,10 @@ export const envSchema = joi.object({
   PORT: joi.number().required(),
   MONGO_URI: joi.string().required(),
   TOKEN_SECRETKEY: joi.string().required(),
-  CORS_ORIGIN: joi.string().required()
+  CORS_ORIGIN: joi.string().required(),
+  SSL_ENABLED: joi.boolean().default(false),
+  SSL_KEY_PATH: joi.string().default(''),
+  SSL_CERT_PATH: joi.string().default('')
 }).unknown(true); 
 
 const { error, value } = envSchema.validate(process.env);
@@ -24,6 +27,11 @@ export const envs = {
   mongoUri: envVars.MONGO_URI,
   jwt: envVars.TOKEN_SECRETKEY,
   corsOrigin: envVars.CORS_ORIGIN,
+  ssl: {
+    enabled: envVars.SSL_ENABLED,
+    keyPath: envVars.SSL_KEY_PATH,
+    certPath: envVars.SSL_CERT_PATH,
+  },
 };
 
 export const GOOGLE_AI_API_KEY = process.env.GOOGLE_AI_API_KEY;
