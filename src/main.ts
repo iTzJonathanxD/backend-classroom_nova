@@ -10,10 +10,17 @@ async function bootstrap() {
   let httpsOptions = null;
 
   if (envs.ssl.enabled) {
+    console.log('SSL is enabled');
+    console.log('Looking for SSL files at:');
+    console.log('Key path:', envs.ssl.keyPath);
+    console.log('Cert path:', envs.ssl.certPath);
+
     httpsOptions = {
       key: fs.readFileSync(envs.ssl.keyPath),
       cert: fs.readFileSync(envs.ssl.certPath),
     };
+    
+    console.log('SSL files loaded successfully');
   }
 
   const app = await NestFactory.create(AppModule, {
